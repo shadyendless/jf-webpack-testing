@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const merge = require('webpack-merge')
 const validate = require('webpack-validator')
 const parts = require('./libs/parts')
+const stylelint = require('stylelint')
 
 const pkg = require('./package.json')
 
@@ -26,7 +27,7 @@ const common = {
   output: {
     path: PATHS.build,
     // Tweak this to match your GitHub project name
-    publicPath: '/webpack-demo',
+    publicPath: '/jf-webpack-testing/',
     filename: '[name].js',
     // This is used for require.ensure. The setup
     // will work without but this is useful to set.
@@ -36,7 +37,30 @@ const common = {
     new HtmlWebpackPlugin({
       title: 'Webpack Demo'
     })
-  ]
+  ],
+  module: {
+    preLoaders: [
+      {
+        test: /\.css$/,
+        loaders: ['postcss'],
+        include: PATHS.app
+      },
+      {
+        test: /\.jsx?$/,
+        loaders: ['eslint'],
+        include: PATHS.app
+      }
+    ]
+  },
+  postcss: function () {
+    return [
+      stylelint({
+        rules: {
+          'color-hex-case': 'upper'
+        }
+      })
+    ]
+  }
 }
 
 var config

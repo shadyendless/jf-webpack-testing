@@ -1,5 +1,5 @@
 require('react')
 
-var component = require('./component')
+let component = require('./component')
 
 document.body.appendChild(component())
